@@ -14,8 +14,8 @@ def main():
 
      for col in df.columns[1:4]:
           df[col] = pd.to_numeric(df[col].apply(lambda x: x.replace(",", "")))
-
      df['json'] = df.apply(lambda x: x.to_json(), axis=1)
+     df['Date'] = pd.to_datetime(df['Date'])
 
      for id, row in df.iterrows():
           #print(row['json'])
