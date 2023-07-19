@@ -1,3 +1,6 @@
+import findspark
+findspark.init()
+
 from tokenize import String
 from xml.dom.minicompat import StringTypes
 import pandas as pd
@@ -20,6 +23,7 @@ model = load_model("model/stock_prediction.h5")
 
 spark = SparkSession \
             .builder \
+            .master("local[*]")\
             .appName("APP") \
             .getOrCreate()
 
@@ -46,17 +50,10 @@ new_df = df.select(\
 
 new_df.printSchema()
 
-def prediction(row):
-    global out_df
-    if (out_df.shape[0] < 59):
-        out_df.loc[out_df.shape[0]] = [row['Date'], row['Price'], 0]
-    else :
-        pred_inp = out_df['Price'].tail(59).append(row['Price'])
-        pred_inp = np.reshape(pred_inp, (pred_inp.shape[0], 1))
-        pred_val = model.predict(pred_inp)
-        out_df.loc[out_df.shape[0]] = [row['Date'], row['Price'], pred_val]
-     
-    print(out_df, out_df.shape)
+def prediction(df):
+    pred_inp = np.reshape(df, (df.shape[0], df.shape[1], 1))
+    pred_val = model.predict(pred_inp)     
+    print(pred_val)
 out = new_df \
         .writeStream \
         .foreach(prediction) \
