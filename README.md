@@ -1,4 +1,4 @@
-# stock_predict
+# STOCK PREDICTION (WITH LSTM and KAFKA + SPARK for streaming)
 Stock Predictor, with Kafka and Spark
 The main objective of the project is for learning how the LSTM works and how to apply Kafka and Spark in data streaming.
 In order to run the project: 
