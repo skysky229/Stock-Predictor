@@ -10,12 +10,12 @@ def main():
      producer = KafkaProducer(bootstrap_servers=config['server'])
      topicName = config['topic']
 
-     df = pd.read_csv("data/markets_historical_vnindex_ind_test.csv").set_index(["Date"]).filter(["Price"]).sort_values(by=["Date"])
+     df = pd.read_csv("data/markets_historical_vnindex_ind_test.csv").filter(["Date","Price"]).sort_values(by=["Date"])
      df['Price'] = pd.to_numeric(df['Price'].apply(lambda x: x.replace(",", "")))
-     
+ 
      for i in range(60,len(df)):
           chunk_df = df.iloc[i-60:i,]
-          msg = json.dumps(chunk_df.to_dict()).encode('utf-8')
+          msg = json.dumps(chunk_df.to_dict("records")).encode('utf-8')
           producer.send(topicName, msg)
           print(msg)
           print("Sent success ", i)
