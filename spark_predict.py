@@ -8,7 +8,6 @@ from config import config
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 import pyspark.pandas as ps
-from sklearn import preprocessing
 import os
 from tensorflow.keras.models import load_model
 import joblib
